@@ -1,0 +1,48 @@
+[project]
+name = "teleologic-api"
+authors = [
+    { name = "Alan Liddell", email = "epiphyte2@proton.me" }
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+    "numpy>=1.22",
+    "starlette>=0.28",
+    "SQLAlchemy>=1.4",
+    "alembic>=1.11",
+    "databases[aiopg]>=0.1"
+]
+dynamic = ["license", "readme", "version"]
+
+[tool.setuptools.dynamic]
+version = { attr = "teleologic.VERSION" }
+readme = { file = ["README.md"] }
+
+[project.optional-dependencies]
+testing = [
+    "black",
+    "aiosqlite",
+    "httpx",
+    "mypy",
+    "pytest>=7",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-openfiles",
+    "pytest-sugar",
+    "sqlalchemy_utils",
+    "tox",
+]
+
+[tool.black]
+target-version = ['py39', 'py310', 'py311']
+line-length = 79
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "--tb=short -s"
+log_cli = true # when true, messages are printed immediately

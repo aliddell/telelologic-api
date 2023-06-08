@@ -1,0 +1,43 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: "Run tests"
+    runs-on: "ubuntu-latest"
+
+    permissions:
+      actions: write
+    env:
+      GH_TOKEN = ${{ github.token }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[testing]"
+
+      - name: Test
+        run: |
+          echo "DATABASE_URL=sqlite:///test_db.sqlite3\n" >.env
+          python -m pytest --color=yes --cov-report=xml --cov=teleologic --maxfail=5 --log-cli-level=0
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
